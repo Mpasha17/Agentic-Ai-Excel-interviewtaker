@@ -1,0 +1,39 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environment
+venv/
+
+# Environment variables
+.env
+
+# macOS metadata
+.DS_Store
+
+# Logs
+*.log
+
+# Unit test / coverage
+.coverage
+htmlcov/
+
+# IDEs and editors
+.vscode/
+.idea/
+*.swp
+
+# Node / frontend artifacts
+node_modules/
+
+# Build outputs
+/dist/
+/build/
+
+# Python wheels
+dist/
+*.egg-info/
+
+# Misc
+*.sqlite3
