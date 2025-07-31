@@ -37,3 +37,8 @@ dist/
 
 # Misc
 *.sqlite3
+# Option 1: Ignore only the backend env file
+backend/.env
+
+# Option 2: Ignore any .env file in any folder
+**/.env
