@@ -29,14 +29,13 @@ jobs:
           source venv/bin/activate
       
       - name: Install dependencies
-        # CORRECTED: Point to the requirements file inside the backend folder
+        # This is the corrected path to your requirements file
         run: pip install -r backend/requirements.txt
         
       - name: Upload artifact for deployment jobs
         uses: actions/upload-artifact@v4
         with:
           name: python-app
-          # Upload the entire project directory, excluding the virtual environment
           path: |
             .
             !venv/
@@ -69,5 +68,4 @@ jobs:
           app-name: 'aiexcelinterview'
           slot-name: 'Production'
           package: .
-          # This command tells Azure how to start your FastAPI app
           startup-command: 'gunicorn --worker-class uvicorn.workers.UvicornWorker backend.main:app'
