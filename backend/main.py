@@ -6,8 +6,21 @@ from mistralai.client import MistralClient
 from dotenv import load_dotenv
 import os
 from typing import Dict, List, Optional
+# --- Add these imports to serve the frontend ---
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
 
 app = FastAPI(title="AI Excel Mock Interviewer", version="1.0.0")
+
+# --- This section serves your frontend UI ---
+# It tells FastAPI to look for static files (CSS, JS) in the 'frontend' directory
+app.mount("/static", StaticFiles(directory="frontend"), name="static")
+
+# This tells FastAPI to serve your index.html file for the root URL
+@app.get("/")
+async def read_index():
+    return FileResponse('frontend/index.html')
+# -----------------------------------------
 
 # Enable CORS for frontend-backend communication
 app.add_middleware(
@@ -18,6 +31,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# ... (the rest of your main.py code remains the same)
 # Mistral AI client setup
 load_dotenv()
 API_KEY = os.getenv("MISTRAL_API_KEY")
@@ -242,12 +256,12 @@ async def get_report(interview_id: str):
     report = generate_final_report(session)
     return ReportResponse(report=report)
 
-@app.get("/")
-async def root():
-    """Health check endpoint"""
-    return {"message": "AI Excel Mock Interviewer API is running"}
+# This health check is no longer needed since the root serves the UI
+# @app.get("/health")
+# async def root():
+#     """Health check endpoint"""
+#     return {"message": "AI Excel Mock Interviewer API is running"}
 
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8000)
-
