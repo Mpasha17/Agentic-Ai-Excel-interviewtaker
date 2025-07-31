@@ -1,6 +1,6 @@
 class ExcelInterviewer {
     constructor() {
-        this.baseURL = 'http://localhost:8000';
+        this.baseURL = '';
         this.interviewId = null;
         this.currentQuestionNumber = 1;
         this.totalQuestions = 5;

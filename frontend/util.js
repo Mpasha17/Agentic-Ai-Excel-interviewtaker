@@ -1,1 +1,0 @@
-export const API_BASE_URL = https://285f82c0-79e0-43c7-80f2-8979cbfba70f-dev.e1-us-east-azure.choreoapis.dev/ai-interview/backend/start-interview/v1/api"
