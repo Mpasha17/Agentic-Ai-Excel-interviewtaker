@@ -12,17 +12,13 @@ from fastapi.responses import FileResponse
 
 app = FastAPI(title="AI Excel Mock Interviewer", version="1.0.0")
 
-# --- This section serves your frontend UI ---
-# It tells FastAPI to look for static files (CSS, JS) in the 'frontend' directory
+
 app.mount("/static", StaticFiles(directory="frontend"), name="static")
 
-# This tells FastAPI to serve your index.html file for the root URL
 @app.get("/")
 async def read_index():
     return FileResponse('frontend/index.html')
-# -----------------------------------------
 
-# Enable CORS for frontend-backend communication
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -31,14 +27,13 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# ... (the rest of your main.py code remains the same)
-# Mistral AI client setup
+
+
 load_dotenv()
 API_KEY = os.getenv("MISTRAL_API_KEY")
 MODEL_NAME = "mistral-large-latest"
 client = MistralClient(api_key=API_KEY)
 
-# In-memory storage for interview sessions
 interview_sessions: Dict[str, dict] = {}
 
 # Pydantic models
@@ -72,9 +67,8 @@ EXCEL_QUESTIONS = [
 def generate_question_with_ai(conversation_history: List[dict], question_number: int) -> str:
     """Generate a contextual Excel interview question using AI"""
     if question_number == 1:
-        return EXCEL_QUESTIONS[0]  # Start with a basic question
-    
-    # Use AI to generate follow-up questions based on conversation history
+        return EXCEL_QUESTIONS[0] 
+  
     prompt = f"""You are an Excel expert conducting a technical interview. Based on the conversation history below, generate the next appropriate Excel-related question. The question should:
 1. Be progressively more challenging
 2. Test different Excel skills (formulas, data analysis, visualization, etc.)
@@ -95,7 +89,7 @@ Generate only the next question, no additional text:"""
         )
         return response.choices[0].message.content.strip()
     except Exception as e:
-        # Fallback to predefined questions if AI fails
+      
         return EXCEL_QUESTIONS[min(question_number - 1, len(EXCEL_QUESTIONS) - 1)]
 
 def evaluate_answer_with_ai(question: str, answer: str) -> dict:
@@ -222,7 +216,7 @@ async def submit_answer(interview_id: str, answer_request: AnswerRequest):
         "evaluation": evaluation
     })
     
-    # Determine if interview should continue (max 5 questions)
+
     if session["question_number"] >= 5:
         session["is_completed"] = True
         return AnswerResponse(
@@ -256,11 +250,6 @@ async def get_report(interview_id: str):
     report = generate_final_report(session)
     return ReportResponse(report=report)
 
-# This health check is no longer needed since the root serves the UI
-# @app.get("/health")
-# async def root():
-#     """Health check endpoint"""
-#     return {"message": "AI Excel Mock Interviewer API is running"}
 
 if __name__ == "__main__":
     import uvicorn

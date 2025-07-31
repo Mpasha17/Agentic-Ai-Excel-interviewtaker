@@ -1,5 +1,7 @@
 # AI Excel Mock Interviewer
 
+Deployed link :- https://aiexcelinterview-a6gqf2h3eceeffcp.canadacentral-01.azurewebsites.net
+
 An AI-powered mock interview system designed to assess Microsoft Excel proficiency through intelligent questioning and evaluation.
 
 ## Project Overview
@@ -173,20 +175,4 @@ ai_excel_interviewer/
 └── README.md               # This file
 ```
 
-## Future Enhancements
-
-- Database integration for persistent storage
-- User authentication and session management
-- Advanced analytics and reporting
-- Multiple interview templates
-- Integration with HR systems
-- Mobile app development
-
-## License
-
-This project is a proof-of-concept for the AI Engineer Assignment.
-
-## Support
-
-For questions or issues, please refer to the project documentation or contact the development team.
 
