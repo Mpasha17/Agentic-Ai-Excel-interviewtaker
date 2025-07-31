@@ -35,5 +35,5 @@ jobs:
           app-name: 'aiexcelinterview'
           slot-name: 'Production'
           package: . # Deploy the entire repository
-          # This startup command is essential for Azure to run your FastAPI app.
+          # The startup command is essential for Azure to run your FastAPI app.
           startup-command: 'gunicorn --bind=0.0.0.0:$PORT --worker-class uvicorn.workers.UvicornWorker backend.main:app'
