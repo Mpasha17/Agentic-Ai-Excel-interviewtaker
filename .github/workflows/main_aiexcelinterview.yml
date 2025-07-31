@@ -25,20 +25,20 @@ jobs:
 
       - name: Create and start virtual environment
         run: |
-          python -m venv venv
-          source venv/bin/activate
+          python -m venv antenv
+          source antenv/bin/activate
       
-      - name: Install dependencies
-        # This is the corrected path to your requirements file
-        run: pip install -r backend/requirements.txt
+      - name: Install dependencies manually
+        run: |
+          pip install --upgrade pip
+          pip install fastapi==0.115.6 uvicorn==0.34.0 mistralai==0.1.8 python-multipart==0.0.20 python-dotenv==1.0.1
         
       - name: Upload artifact for deployment jobs
         uses: actions/upload-artifact@v4
         with:
           name: python-app
-          path: |
-            .
-            !venv/
+          # Upload the entire project directory, including the virtual environment with installed packages
+          path: .
 
   deploy:
     runs-on: ubuntu-latest
@@ -67,5 +67,5 @@ jobs:
         with:
           app-name: 'aiexcelinterview'
           slot-name: 'Production'
-          package: .
-          startup-command: 'gunicorn --worker-class uvicorn.workers.UvicornWorker backend.main:app'
+          package: . # Deploy the entire repository, which now includes the dependencies
+          startup-command: 'gunicorn --bind=0.0.0.0:$PORT --worker-class uvicorn.workers.UvicornWorker backend.main:app'
