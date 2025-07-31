@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Excel Mock Interviewer</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Home Page -->
+        <div id="home-page" class="page active">
+            <div class="header">
+                <h1>AI Excel Mock Interviewer</h1>
+                <p>Test your Excel skills with our AI-powered mock interview system</p>
+            </div>
+            <div class="content">
+                <div class="intro-card">
+                    <h2>Welcome to Your Excel Interview</h2>
+                    <p>This mock interview will assess your Microsoft Excel proficiency through a series of technical questions. The AI interviewer will:</p>
+                    <ul>
+                        <li>Ask you 5 progressively challenging Excel questions</li>
+                        <li>Evaluate your responses in real-time</li>
+                        <li>Provide constructive feedback</li>
+                        <li>Generate a comprehensive performance report</li>
+                    </ul>
+                    <button id="start-interview-btn" class="primary-btn">Start Interview</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Interview Page -->
+        <div id="interview-page" class="page">
+            <div class="header">
+                <h1>Excel Interview in Progress</h1>
+                <div class="progress-bar">
+                    <div id="progress-fill" class="progress-fill"></div>
+                </div>
+                <p id="question-counter">Question 1 of 5</p>
+            </div>
+            <div class="content">
+                <div class="question-card">
+                    <h3>Question:</h3>
+                    <p id="current-question">Loading question...</p>
+                </div>
+                <div class="answer-section">
+                    <label for="answer-input">Your Answer:</label>
+                    <textarea id="answer-input" placeholder="Type your answer here..." rows="6"></textarea>
+                    <button id="submit-answer-btn" class="primary-btn">Submit Answer</button>
+                </div>
+                <div id="feedback-section" class="feedback-section" style="display: none;">
+                    <h4>Feedback:</h4>
+                    <p id="feedback-text"></p>
+                </div>
+            </div>
+            <div id="loading" class="loading" style="display: none;">
+                <div class="spinner"></div>
+                <p>Processing your answer...</p>
+            </div>
+        </div>
+
+        <!-- Report Page -->
+        <div id="report-page" class="page">
+            <div class="header">
+                <h1>Interview Complete</h1>
+                <p>Here's your performance summary</p>
+            </div>
+            <div class="content">
+                <div class="report-card">
+                    <h2>Performance Report</h2>
+                    <div id="report-content">
+                        <p>Generating your report...</p>
+                    </div>
+                    <div class="actions">
+                        <button id="new-interview-btn" class="primary-btn">Start New Interview</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
+
