@@ -11,48 +11,15 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Set up Python version
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
-
-      - name: Create and start virtual environment
-        run: |
-          python -m venv antenv
-          source antenv/bin/activate
-      
-      - name: Install dependencies manually
-        run: |
-          pip install --upgrade pip
-          pip install fastapi==0.115.6 uvicorn==0.34.0 mistralai==0.1.8 python-multipart==0.0.20 python-dotenv==1.0.1
-        
-      - name: Upload artifact for deployment jobs
-        uses: actions/upload-artifact@v4
-        with:
-          name: python-app
-          # Upload the entire project directory, including the virtual environment with installed packages
-          path: .
-
   deploy:
     runs-on: ubuntu-latest
-    needs: build
     permissions:
       id-token: write # Required for OIDC login
       contents: read # Required for checkout
 
     steps:
-      - name: Download artifact from build job
-        uses: actions/download-artifact@v4
-        with:
-          name: python-app
-          path: .
+      - name: Checkout repository
+        uses: actions/checkout@v4
       
       - name: Login to Azure
         uses: azure/login@v2
@@ -67,5 +34,6 @@ jobs:
         with:
           app-name: 'aiexcelinterview'
           slot-name: 'Production'
-          package: . # Deploy the entire repository, which now includes the dependencies
+          package: . # Deploy the entire repository
+          # This startup command is essential for Azure to run your FastAPI app.
           startup-command: 'gunicorn --bind=0.0.0.0:$PORT --worker-class uvicorn.workers.UvicornWorker backend.main:app'
