@@ -29,7 +29,7 @@ jobs:
           source venv/bin/activate
       
       - name: Install dependencies
-        # Correctly point to the requirements file inside the backend folder
+        # CORRECTED: Point to the requirements file inside the backend folder
         run: pip install -r backend/requirements.txt
         
       - name: Upload artifact for deployment jobs
@@ -44,9 +44,6 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     needs: build
-    # We are removing the 'environment' section to simplify authentication.
-    # This will authenticate based on the main branch, which is more standard
-    # and avoids the federated credential error you were seeing.
     permissions:
       id-token: write # Required for OIDC login
       contents: read # Required for checkout
@@ -72,6 +69,5 @@ jobs:
           app-name: 'aiexcelinterview'
           slot-name: 'Production'
           package: .
-          # This command tells Azure how to start your FastAPI app,
-          # which is located in the 'backend' folder.
+          # This command tells Azure how to start your FastAPI app
           startup-command: 'gunicorn --worker-class uvicorn.workers.UvicornWorker backend.main:app'
