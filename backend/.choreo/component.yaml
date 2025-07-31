@@ -1,0 +1,60 @@
+schemaVersion: "1.2"
+
+# REST endpoints exposed by the FastAPI backend
+endpoints:
+  # Health-check
+  - name: health
+    displayName: Health Check
+    type: REST
+    service:
+      basePath: /
+      port: 8000
+    route: /
+    method: GET
+    networkVisibilities:
+      - Project
+      - Public
+
+  # Start a new interview
+  - name: start-interview
+    displayName: Start Interview
+    type: REST
+    service:
+      basePath: /
+      port: 8000
+    route: /interview/start
+    method: POST
+    networkVisibilities:
+      - Project
+      - Public
+
+  # Submit answer
+  - name: submit-answer
+    displayName: Submit Answer
+    type: REST
+    service:
+      basePath: /
+      port: 8000
+    route: /interview/{interview_id}/answer
+    method: POST
+    networkVisibilities:
+      - Project
+      - Public
+
+  # Get final report
+  - name: get-report
+    displayName: Get Report
+    type: REST
+    service:
+      basePath: /
+      port: 8000
+    route: /interview/{interview_id}/report
+    method: GET
+    networkVisibilities:
+      - Project
+      - Public
+
+dependencies:
+  connectionReferences:
+    - name: mistral-connection
+      resourceRef: thirdparty:mistral/v1
