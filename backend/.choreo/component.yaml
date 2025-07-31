@@ -54,7 +54,4 @@ endpoints:
       - Project
       - Public
 
-dependencies:
-  connectionReferences:
-    - name: mistral-connection
-      resourceRef: thirdparty:mistral/v1
+
