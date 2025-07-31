@@ -2,7 +2,7 @@
 # More GitHub Actions for Azure: https://github.com/Azure/actions
 # More info on Python, GitHub Actions, and Azure App Service: https://aka.ms/python-webapps-actions
 
-name: Build and deploy Python app to Azure Web App - AINTERVIEW
+name: Build and deploy Python app to Azure Web App - aiexcelinterview
 
 on:
   push:
@@ -15,7 +15,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
       - name: Set up Python version
         uses: actions/setup-python@v5
@@ -28,22 +29,27 @@ jobs:
           source venv/bin/activate
       
       - name: Install dependencies
-        run: pip install -r backend/requirements.txt # Point to backend requirements
-
+        # Correctly point to the requirements file inside the backend folder
+        run: pip install -r backend/requirements.txt
+        
       - name: Upload artifact for deployment jobs
         uses: actions/upload-artifact@v4
         with:
           name: python-app
-          path: . # Upload the entire project
+          # Upload the entire project directory, excluding the virtual environment
+          path: |
+            .
+            !venv/
 
   deploy:
     runs-on: ubuntu-latest
     needs: build
-    #environment:
-    #  name: 'Production'
-    #  url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
+    # We are removing the 'environment' section to simplify authentication.
+    # This will authenticate based on the main branch, which is more standard
+    # and avoids the federated credential error you were seeing.
     permissions:
-      id-token: write #This is required for requesting the JWT
+      id-token: write # Required for OIDC login
+      contents: read # Required for checkout
 
     steps:
       - name: Download artifact from build job
@@ -55,15 +61,17 @@ jobs:
       - name: Login to Azure
         uses: azure/login@v2
         with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_987D59ACEE3745008E1F8E508BA48A2A }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_A8BAF868A1B34E4988086FCBB9C2DA2C }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_058A1A0CB3E34C3780E9E3AFAC425B8A }}
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_E185A39D758C474DA4858E89AD50FD28 }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_F8EBB425A0AD4B069997742EB6488787 }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_195FDEBB7FD34D9F85DECA1061190CF3 }}
 
       - name: 'Deploy to Azure Web App'
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
         with:
-          app-name: 'AINTERVIEW'
+          app-name: 'aiexcelinterview'
           slot-name: 'Production'
           package: .
-          startup-command: 'gunicorn --worker-class uvicorn.workers.UvicornWorker backend.main:app' # Set startup command
+          # This command tells Azure how to start your FastAPI app,
+          # which is located in the 'backend' folder.
+          startup-command: 'gunicorn --worker-class uvicorn.workers.UvicornWorker backend.main:app'
